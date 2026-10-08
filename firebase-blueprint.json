@@ -1,0 +1,144 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public profile of a registered user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Unique user ID matching auth.uid" },
+        "username": { "type": "string", "description": "Unique handle/username" },
+        "displayName": { "type": "string", "description": "Display name of the user" },
+        "bio": { "type": "string", "description": "Short bio or description" },
+        "avatarUrl": { "type": "string", "description": "URL of user avatar" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp via serverTimestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp via serverTimestamp" }
+      },
+      "required": ["userId", "username", "displayName", "createdAt"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Feed post with image or text authored by a user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique post ID" },
+        "authorId": { "type": "string", "description": "User ID of author matching auth.uid" },
+        "authorUsername": { "type": "string", "description": "Username of post author" },
+        "authorDisplayName": { "type": "string", "description": "Display name of post author" },
+        "authorAvatarUrl": { "type": "string", "description": "Avatar URL of author" },
+        "content": { "type": "string", "description": "Text caption of the post" },
+        "imageUrl": { "type": "string", "description": "Optional post image URL or base64 data URL" },
+        "likesCount": { "type": "integer", "description": "Number of likes" },
+        "commentsCount": { "type": "integer", "description": "Number of comments" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp via serverTimestamp" }
+      },
+      "required": ["id", "authorId", "authorUsername", "authorDisplayName", "content", "likesCount", "commentsCount", "createdAt"]
+    },
+    "Like": {
+      "title": "Like",
+      "description": "Like record on a specific post",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "User ID of who liked" },
+        "postId": { "type": "string", "description": "Post ID that was liked" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "postId", "createdAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "Comment under a post",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique comment ID" },
+        "postId": { "type": "string", "description": "Post ID being commented on" },
+        "authorId": { "type": "string", "description": "User ID of commenter" },
+        "authorUsername": { "type": "string", "description": "Username of commenter" },
+        "authorDisplayName": { "type": "string", "description": "Display name of commenter" },
+        "authorAvatarUrl": { "type": "string", "description": "Avatar URL of commenter" },
+        "text": { "type": "string", "description": "Comment text" },
+        "replyToUsername": { "type": "string", "description": "Username being replied to" },
+        "replyToCommentId": { "type": "string", "description": "ID of parent comment if replying" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["id", "postId", "authorId", "authorUsername", "authorDisplayName", "text", "createdAt"]
+    },
+    "DirectMessage": {
+      "title": "DirectMessage",
+      "description": "Chat message between two users",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique message ID" },
+        "senderId": { "type": "string", "description": "UID of message sender" },
+        "senderName": { "type": "string", "description": "Name of sender" },
+        "senderAvatarUrl": { "type": "string", "description": "Avatar URL of sender" },
+        "receiverId": { "type": "string", "description": "UID of message recipient" },
+        "text": { "type": "string", "description": "Message content" },
+        "participants": { "type": "array", "description": "List of the two user IDs participating" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["id", "senderId", "senderName", "receiverId", "text", "participants", "createdAt"]
+    },
+    "Follow": {
+      "title": "Follow",
+      "description": "Follow relationship between two users",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique follow relationship ID, e.g. followerId_targetUserId" },
+        "followerId": { "type": "string", "description": "UID of follower" },
+        "targetUserId": { "type": "string", "description": "UID of user being followed" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["id", "followerId", "targetUserId", "createdAt"]
+    },
+    "HeyNotification": {
+      "title": "HeyNotification",
+      "description": "Notification alerting user of like, comment, or follower",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique notification ID" },
+        "recipientId": { "type": "string", "description": "Target recipient UID" },
+        "actorId": { "type": "string", "description": "UID who performed the action" },
+        "actorUsername": { "type": "string", "description": "Username of the actor" },
+        "actorDisplayName": { "type": "string", "description": "Display name of the actor" },
+        "actorAvatarUrl": { "type": "string", "description": "Avatar of the actor" },
+        "type": { "type": "string", "description": "LIKE, COMMENT, or FOLLOW" },
+        "postId": { "type": "string", "description": "Related post ID if applicable" },
+        "postPreviewText": { "type": "string", "description": "Snippet of post content" },
+        "commentText": { "type": "string", "description": "Snippet of comment if applicable" },
+        "read": { "type": "boolean", "description": "Read status" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["id", "recipientId", "actorId", "actorUsername", "actorDisplayName", "type", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Profiles for registered users"
+    },
+    "/posts/{postId}": {
+      "schema": "Post",
+      "description": "Public social posts"
+    },
+    "/posts/{postId}/likes/{userId}": {
+      "schema": "Like",
+      "description": "Post likes"
+    },
+    "/posts/{postId}/comments/{commentId}": {
+      "schema": "Comment",
+      "description": "Comments on posts"
+    },
+    "/messages/{messageId}": {
+      "schema": "DirectMessage",
+      "description": "Direct conversation messages"
+    },
+    "/follows/{followId}": {
+      "schema": "Follow",
+      "description": "User follow relationships"
+    },
+    "/users/{userId}/notifications/{notificationId}": {
+      "schema": "HeyNotification",
+      "description": "User notifications for likes, comments, and followers"
+    }
+  }
+}
